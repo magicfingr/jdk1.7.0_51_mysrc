@@ -61,16 +61,11 @@ import java.io.IOException;
  *
  * <p> Char buffers can be created either by {@link #allocate
  * </code><i>allocation</i><code>}, which allocates space for the buffer's
- *
- *
  * content, by {@link #wrap(char[]) </code><i>wrapping</i><code>} an existing
- * char array or&#32;string into a buffer, or by creating a
+ * char array or string into a buffer, or by creating a
  * <a href="ByteBuffer.html#views"><i>view</i></a> of an existing byte buffer.
  *
  *
-
-*
-
  *
  * <p> Like a byte buffer, a char buffer is either <a
  * href="ByteBuffer.html#direct"><i>direct</i> or <i>non-direct</i></a>.  A
@@ -80,23 +75,17 @@ import java.io.IOException;
  * a char buffer is direct may be determined by invoking the {@link
  * #isDirect isDirect} method.  </p>
  *
-
-*
-
  *
  * <p> This class implements the {@link CharSequence} interface so that
  * character buffers may be used wherever character sequences are accepted, for
  * example in the regular-expression package <tt>{@link java.util.regex}</tt>.
  * </p>
  *
-
  *
-
  *
  * <p> Methods in this class that do not otherwise have a value to return are
  * specified to return the buffer upon which they are invoked.  This allows
  * method invocations to be chained.
- *
  *
  * The sequence of statements
  *
@@ -111,7 +100,6 @@ import java.io.IOException;
  * <blockquote><pre>
  * cb.put("text/").put(subtype).put("; charset=").put(enc);</pre></blockquote>
  *
-
  *
  *
  * @author Mark Reinhold
@@ -128,7 +116,7 @@ public abstract class CharBuffer
     // reduce the number of virtual method invocations needed to access these
     // values, which is especially costly when coding small buffers.
     //
-    final char[] hb;                  // Non-null only for heap buffers
+    final char[] hb;                  // Non-null only for heap buffers (non-direct)
     final int offset;
     boolean isReadOnly;                 // Valid only for heap buffers
 
@@ -148,30 +136,6 @@ public abstract class CharBuffer
     CharBuffer(int mark, int pos, int lim, int cap) { // package-private
         this(mark, pos, lim, cap, null, 0);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Allocates a new char buffer.
@@ -530,7 +494,7 @@ public abstract class CharBuffer
      *          parameters do not hold
      */
     public CharBuffer get(char[] dst, int offset, int length) {
-        checkBounds(offset, length, dst.length);
+        checkBounds(offset, length, dst.length);    //保证传入的参数合法
         if (length > remaining())
             throw new BufferUnderflowException();
         int end = offset + length;
@@ -873,21 +837,6 @@ public abstract class CharBuffer
      * followed immediately by an invocation of another relative <i>put</i>
      * method. </p>
      *
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
      *
      * @return  This buffer
      *
@@ -902,31 +851,6 @@ public abstract class CharBuffer
      * @return  <tt>true</tt> if, and only if, this buffer is direct
      */
     public abstract boolean isDirect();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Returns the current hash code of this buffer.
@@ -998,8 +922,6 @@ public abstract class CharBuffer
 
     private static boolean equals(char x, char y) {
 
-
-
         return x == y;
 
     }
@@ -1010,14 +932,6 @@ public abstract class CharBuffer
      * <p> Two char buffers are compared by comparing their sequences of
      * remaining elements lexicographically, without regard to the starting
      * position of each sequence within its corresponding buffer.
-
-
-
-
-
-
-
-
      * Pairs of {@code char} elements are compared as if by invoking
      * {@link Character#compare(char,char)}.
 
@@ -1039,18 +953,11 @@ public abstract class CharBuffer
 
     private static int compare(char x, char y) {
 
-
-
-
-
-
         return Character.compare(x, y);
 
     }
 
     // -- Other char stuff --
-
-
 
     /**
      * Returns a string containing the characters in this buffer.

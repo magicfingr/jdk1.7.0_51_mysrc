@@ -79,7 +79,7 @@ class BufferedInputStream extends FilterInputStream {
      * </code>contain buffered input data obtained
      * from the underlying  input stream.
      */
-    protected int count;
+    protected int count;    //缓冲区中的有效数据长度
 
     /**
      * The current position in the buffer. This is the index of the next

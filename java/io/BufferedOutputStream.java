@@ -122,7 +122,7 @@ class BufferedOutputStream extends FilterOutputStream {
             out.write(b, off, len);
             return;
         }
-        if (len > buf.length - count) {
+        if (len > buf.length - count) { //无缓存空间，flush
             flushBuffer();
         }
         System.arraycopy(b, off, buf, count, len);

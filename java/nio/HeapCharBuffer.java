@@ -217,16 +217,14 @@ class HeapCharBuffer
 
     }
 
+    //将剩余的数据拷贝到hb的起始处（offset + 1）
     public CharBuffer compact() {
-
         System.arraycopy(hb, ix(position()), hb, ix(0), remaining());
+        //TODO zxt 为什么把position设成remaning()（数据结尾）？而不是 position(ix(0)) ？
         position(remaining());
         limit(capacity());
         discardMark();
         return this;
-
-
-
     }
 
 

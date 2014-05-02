@@ -214,7 +214,7 @@ public class ObjectInputStream
 
     /** table mapping primitive type names to corresponding class objects */
     private static final HashMap<String, Class<?>> primClasses
-        = new HashMap<>(8, 1.0F);
+        = new HashMap(8, 1.0F);
     static {
         primClasses.put("boolean", boolean.class);
         primClasses.put("byte", byte.class);
@@ -230,11 +230,11 @@ public class ObjectInputStream
     private static class Caches {
         /** cache of subclass security audit results */
         static final ConcurrentMap<WeakClassKey,Boolean> subclassAudits =
-            new ConcurrentHashMap<>();
+            new ConcurrentHashMap();
 
         /** queue for WeakReferences to audited subclasses */
         static final ReferenceQueue<Class<?>> subclassAuditsQueue =
-            new ReferenceQueue<>();
+            new ReferenceQueue();
     }
 
     /** filter stream for handling block data conversion */

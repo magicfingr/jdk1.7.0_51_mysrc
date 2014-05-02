@@ -189,6 +189,7 @@ public abstract class Buffer {
     Buffer(int mark, int pos, int lim, int cap) {       // package-private
         if (cap < 0)
             throw new IllegalArgumentException("Negative capacity: " + cap);
+        //mark <= position <= limit <= capacity，从大到小依次赋值并判断合法性
         this.capacity = cap;
         limit(lim);
         position(pos);
@@ -231,7 +232,7 @@ public abstract class Buffer {
      * @throws  IllegalArgumentException
      *          If the preconditions on <tt>newPosition</tt> do not hold
      */
-    public final Buffer position(int newPosition) {     //返回Buffer是为了支持invocation chaining
+    public final Buffer position(int newPosition) {     //返回Buffer是为了支持invocation chaining，以下皆如此
         if ((newPosition > limit) || (newPosition < 0))
             throw new IllegalArgumentException();
         position = newPosition;
@@ -533,6 +534,9 @@ public abstract class Buffer {
         return i;
     }
 
+    /**
+     * 确保 i >= 0 && nb <= limit - i
+     */
     final int checkIndex(int i, int nb) {               // package-private
         if ((i < 0) || (nb > limit - i))
             throw new IndexOutOfBoundsException();
