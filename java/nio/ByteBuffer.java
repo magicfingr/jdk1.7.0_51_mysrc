@@ -28,9 +28,6 @@
 package java.nio;
 
 
-
-
-
 /**
  * A byte buffer.
  *
@@ -52,7 +49,6 @@ package java.nio;
  *   byte array or some other byte
  *   buffer into this buffer; </p></li>
  *
-
  *
  *   <li><p> Absolute and relative {@link #getChar() </code><i>get</i><code>}
  *   and {@link #putChar(char) </code><i>put</i><code>} methods that read and
@@ -63,7 +59,6 @@ package java.nio;
  *   which allow a byte buffer to be viewed as a buffer containing values of
  *   some other primitive type; and </p></li>
  *
-
  *
  *   <li><p> Methods for {@link #compact </code>compacting<code>}, {@link
  *   #duplicate </code>duplicating<code>}, and {@link #slice
@@ -74,20 +69,11 @@ package java.nio;
  * <p> Byte buffers can be created either by {@link #allocate
  * </code><i>allocation</i><code>}, which allocates space for the buffer's
  *
-
  *
  * content, or by {@link #wrap(byte[]) </code><i>wrapping</i><code>} an
  * existing byte array  into a buffer.
  *
-
-
-
-
-
-
-
  *
-
  *
  * <a name="direct">
  * <h4> Direct <i>vs.</i> non-direct buffers </h4>
@@ -185,38 +171,13 @@ package java.nio;
  * <p> The byte order of a view buffer is fixed to be that of its byte buffer
  * at the time that the view is created.  </p>
  *
-
-*
-
-
-
-
-
-
-
-
-
-
-
-*
-
-
-
-
-
-
-
-
  *
-
  * <h4> Invocation chaining </h4>
-
  *
  * <p> Methods in this class that do not otherwise have a value to return are
  * specified to return the buffer upon which they are invoked.  This allows
  * method invocations to be chained.
  *
-
  *
  * The sequence of statements
  *
@@ -230,23 +191,6 @@ package java.nio;
  * <blockquote><pre>
  * bb.putInt(0xCAFEBABE).putShort(3).putShort(45);</pre></blockquote>
  *
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  *
  *
  * @author Mark Reinhold
@@ -263,7 +207,7 @@ public abstract class ByteBuffer
     // reduce the number of virtual method invocations needed to access these
     // values, which is especially costly when coding small buffers.
     //
-    final byte[] hb;                  // Non-null only for heap buffers
+    final byte[] hb;                  // Non-null only for heap buffers (non-direct)
     final int offset;
     boolean isReadOnly;                 // Valid only for heap buffers
 
@@ -391,99 +335,6 @@ public abstract class ByteBuffer
     public static ByteBuffer wrap(byte[] array) {
         return wrap(array, 0, array.length);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Creates a new byte buffer whose content is a shared subsequence of
@@ -832,92 +683,6 @@ public abstract class ByteBuffer
         return put(src, 0, src.length);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // -- Other stuff --
 
     /**
@@ -1059,10 +824,6 @@ public abstract class ByteBuffer
     }
 
 
-
-
-
-
     /**
      * Returns the current hash code of this buffer.
      *
@@ -1098,13 +859,6 @@ public abstract class ByteBuffer
      *
      *   <li><p> The two sequences of remaining elements, considered
      *   independently of their starting positions, are pointwise equal.
-
-
-
-
-
-
-
      *   </p></li>
      *
      * </ol>
@@ -1133,8 +887,6 @@ public abstract class ByteBuffer
 
     private static boolean equals(byte x, byte y) {
 
-
-
         return x == y;
 
     }
@@ -1145,14 +897,6 @@ public abstract class ByteBuffer
      * <p> Two byte buffers are compared by comparing their sequences of
      * remaining elements lexicographically, without regard to the starting
      * position of each sequence within its corresponding buffer.
-
-
-
-
-
-
-
-
      * Pairs of {@code byte} elements are compared as if by invoking
      * {@link Byte#compare(byte,byte)}.
 
@@ -1173,11 +917,6 @@ public abstract class ByteBuffer
     }
 
     private static int compare(byte x, byte y) {
-
-
-
-
-
 
         return Byte.compare(x, y);
 

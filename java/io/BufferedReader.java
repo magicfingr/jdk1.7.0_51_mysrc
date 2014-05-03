@@ -72,7 +72,7 @@ public class BufferedReader extends Reader {
     private int markedChar = UNMARKED;
     private int readAheadLimit = 0; /* Valid only when markedChar > 0 */
 
-    /** If the next character is a line feed, skip it */
+    /** If the next character is a line feed('\n'), skip it */
     private boolean skipLF = false;
 
     /** The skipLF flag when the mark was set */
@@ -332,7 +332,7 @@ public class BufferedReader extends Reader {
                 omitLF = false;
 
             charLoop:
-                for (i = nextChar; i < nChars; i++) {
+                for (i = nextChar; i < nChars; i++) {   //在缓冲区可用数据中找换行符
                     c = cb[i];
                     if ((c == '\n') || (c == '\r')) {
                         eol = true;

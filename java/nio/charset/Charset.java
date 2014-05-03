@@ -311,7 +311,8 @@ public abstract class Charset
     }
 
     /* The standard set of charsets */
-    private static CharsetProvider standardProvider = new StandardCharsets();
+//    private static CharsetProvider standardProvider = new StandardCharsets(); //TODO zxt 此处StandarCharsets只有私有构造方法，不能访问？
+    private static CharsetProvider standardProvider = null;
 
     // Cache of the most-recently-returned charsets,
     // along with the names that were used to find them

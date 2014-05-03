@@ -125,7 +125,7 @@ class BufferedInputStream extends FilterInputStream {
      * @see     java.io.BufferedInputStream#mark(int)
      * @see     java.io.BufferedInputStream#pos
      */
-    protected int markpos = -1;
+    protected int markpos = -1; //mark位置（mark和marklimit都是为了支持 reset & read 操作）
 
     /**
      * The maximum read ahead allowed after a call to the
@@ -213,11 +213,12 @@ class BufferedInputStream extends FilterInputStream {
                 pos = sz;
                 markpos = 0;
             } else if (buffer.length >= marklimit) {
-                /* markpos == 0，但超出limit无效（length + 1 - markpos > marklimit），丢弃数据 */
+                // markpos == 0，但要求读取的数据长度已经超出limit（length + 1 - markpos > marklimit）
+                // 故可以直接丢弃原buffer数据，markpos 无效
                 markpos = -1;   /* buffer got too big, invalidate mark */
                 pos = 0;        /* drop buffer contents */
             } else {            /* grow buffer */
-                /* markpos == 0，但依然有效，故依旧需要保存以前的buf数据（以提供reset重读功能），只能增大buf */
+                // markpos == 0，但依然有效，故依旧需要保存以前的buf数据（以提供reset重读功能），只能增大buf
                 int nsz = pos * 2;
                 if (nsz > marklimit)    //buf size最大不会超出marklimit
                     nsz = marklimit;
@@ -338,9 +339,9 @@ class BufferedInputStream extends FilterInputStream {
         for (;;) {
             int nread = read1(b, off + n, len - n);
             if (nread <= 0)
-                return (n == 0) ? nread : n;
+                return (n == 0) ? nread : n;    //n == 0 && nread <= 0说明读取失败或者没有读取字符数为0
             n += nread;
-            if (n >= len)
+            if (n >= len)   //不会出现 n > len 的情况
                 return n;
             // if not closed but no bytes available, return
             InputStream input = in;
@@ -402,12 +403,8 @@ class BufferedInputStream extends FilterInputStream {
      */
     public synchronized int available() throws IOException {
         int n = count - pos;
-        /*
-        avail始终为0(InputStream.available)，n不可能大于MAV_VALUE，
-        所以此方法返回值一定是n + avail = n，即当前已缓冲，未读取的数据量
-         */
         int avail = getInIfOpen().available();
-        return n > (Integer.MAX_VALUE - avail)
+        return n > (Integer.MAX_VALUE - avail)  //防止 n + avail 溢出
                     ? Integer.MAX_VALUE
                     : n + avail;
     }

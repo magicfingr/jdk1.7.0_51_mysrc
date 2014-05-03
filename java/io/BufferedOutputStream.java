@@ -118,6 +118,7 @@ class BufferedOutputStream extends FilterOutputStream {
             /* If the request length exceeds the size of the output buffer,
                flush the output buffer and then write the data directly.
                In this way buffered streams will cascade harmlessly. */
+            //一次性写入数据的长度超过bufferSize，故先将buffer中原有数据全部写入，然后直接写入当前数据
             flushBuffer();
             out.write(b, off, len);
             return;
@@ -125,7 +126,7 @@ class BufferedOutputStream extends FilterOutputStream {
         if (len > buf.length - count) { //无缓存空间，flush
             flushBuffer();
         }
-        System.arraycopy(b, off, buf, count, len);
+        System.arraycopy(b, off, buf, count, len);  //将新数据保存到buffer（并没有立即写入）
         count += len;
     }
 

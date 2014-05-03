@@ -188,6 +188,14 @@ public class BufferedWriter extends Writer {
                 out.write(cbuf, off, len);
                 return;
             }
+            /*
+            TAG zxt 这里明显写得过于复杂，估计这哥脑子糊掉了，参考 @Arthur van Hoff 版的 BufferedOutputStream.java：
+            if(len + nChars > cb.length) { //无缓存空间，flush
+                flushBuffer();
+            }
+            System.arraycopy(cbuf, off, cb, nextChar, len);  //将新数据保存到buffer（并没有立即写入）
+            nChars += len;
+            */
 
             int b = off, t = off + len;
             while (b < t) {
